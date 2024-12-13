@@ -1,6 +1,6 @@
 @extends('layouts.facultylayout')
 @section('content')
-<title>PLE-REAP FACULTY | DASHBOARD </title>
+<title>SmartQ Faculty | Students Report</title>
 <body>
     <div style="">
         <facultycontentcard title="Students">

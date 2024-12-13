@@ -21,9 +21,9 @@
     <nav class="navbar navbar-light bg-light justify-content-between">
       <div>
       <a class="navbar-brand" href="#">
-        <img src="https://med.ple-reap.com/assets/img/logo.png" alt="Logo" style="height: 48px; width: auto;">
+        <img src="/assets/logo.png" alt="Logo" style="height: 48px; width: auto;">
       </a>
-      <a class="alert-link" aria-current="page" href="https://med.ple-reap.com/login" style="color: black;">PLE-REAP: Medicine Website App</a>  
+      <a class="alert-link" aria-current="page" href="/exam" style="color: black;">SmartQ</a>  
       </div>
       <div>
         <button @click="logout" class="btn btn-primary px-3" style="background-color: #292B4E;" @mouseover="hover = true" @mouseleave="hover = false">
