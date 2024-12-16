@@ -9,16 +9,16 @@
         </div>
 
         <!-- Exam Type Selector -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="examType">Exam Type</label>
             <select v-model="examData.examType" class="form-control" required>
                 <option disabled value="">Select Exam Type</option>
                 <option value="1">Major Exam</option>
                 <option value="2">Mock Exam</option>
             </select>
-        </div>
+        </div> -->
 
-        <form v-if="examData.examType === '2'" @submit.prevent="submitForm">
+        <!-- <form v-if="examData.examType === '2'" @submit.prevent="submitForm">
             <div class="form-group">
                 <label for="examName">Exam Name</label>
                 <input v-model="examData.name" type="text" class="form-control" placeholder="Enter exam name" required>
@@ -54,7 +54,7 @@
                 <a href="/exams" class="btn btn-secondary">Close</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-        </form>
+        </form> -->
 
         <form v-else-if="examData.examType === '1'" @submit.prevent="submitForm">
             <div class="form-group">
@@ -70,7 +70,7 @@
             <div class="form-group row justify-content-center mx-auto">
                 <div class="col-md-3 mb-3">
                     <label for="majorDuration">Duration</label>
-                    <input v-model="examData.duration" type="number" class="form-control" placeholder="Enter duration" required>
+                    <input v-model="examData.duration" type="number" class="form-control" placeholder="Enter duration in minutes" required>
                 </div>
 
                 <div class="col-md-3 mb-3">
@@ -197,7 +197,7 @@ export default {
                 endDate: '',
                 duration: '',
                 item_num: '',
-                examType: '', 
+                examType: '1', 
                 questions: []
             },
             errors: '',

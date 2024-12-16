@@ -1,6 +1,6 @@
 @extends('layouts.facultylayout')
 @section('content')
-<title>SmartQ Faculty | Students Report</title>
+<title>SMARTQ FACULTY | STUDENT </title>
 <body>
     <div style="">
         <facultycontentcard title="Students">

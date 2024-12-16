@@ -10,6 +10,7 @@ use App\Tes;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Auth;
+use App\Models\Examinations;
 
 class Exam2Controller extends Controller
 {
@@ -57,14 +58,22 @@ class Exam2Controller extends Controller
     
     //
     public function majorindex(Request $r){
+        //id is user id, examid is exam id
+        // dd($r->all());
         $user=Auth::user()->id;
-        $exam_id=2;
+        $exam_id = $r->examid;
         // dd($user);
+
+        // $q = MajorQuestions::where('exam_id', $exam_id)
+        //                     ->where('status', 1)->get('topic_id');
+        // dd($q);
+        $exam = Examinations::findOrFail($exam_id);
         $top=Topic::all();
-        $topicIds = $top->pluck('topic_id');
+        $topicIds = MajorQuestions::where('exam_id', $exam_id)
+                    ->where('status', 1)->get('topic_id');;
         $time=1;
-        $subtopic=Subtop::whereIn('topic_id',$topicIds)->get();
-        $subtopicids=Subtop::whereIn('topic_id',$topicIds)->get('subtopic_id');
+        $subtopic=Subtop::whereIn('topic_id', $topicIds)->get();
+        $subtopicids=Subtop::whereIn('topic_id', $topicIds)->get('subtopic_id');
         $att1 = Tes::where('student_id', $user)
         ->where('exam_type', $r->examid)
         ->latest()
@@ -74,7 +83,10 @@ class Exam2Controller extends Controller
         else    
            $attemp=1;
         foreach($subtopicids as $x){
-            $q = MajorQuestions::where('subtopic_id',$x["subtopic_id"])->where('status',1)->get()->sortBy('topic_id');
+            $q = MajorQuestions::where('subtopic_id', $x["subtopic_id"])
+                                ->where('exam_id', $exam_id)
+                                ->where('status', 1)->get()
+                                ->sortBy('topic_id');
             if($q->count()==0){
                 continue;
             }
@@ -83,11 +95,12 @@ class Exam2Controller extends Controller
                 $attemp=$attemp;
             }
         }
-        if($attemp>3){
+        if($attemp>1){
             return view('max_attempt');
         }
         $ques = collect();
         $st = SubTop::whereIn('topic_id',$topicIds)->get();
+
         foreach($st as $st){
             $tps=Topic::where('topic_id',$st->topic_id)->first()->topic_name;
             $responses=Tes::where('student_id',$user)->where('topic',$st->subtopic_id)->where('exam_type',$exam_id)->latest()->first();  
@@ -111,6 +124,7 @@ class Exam2Controller extends Controller
                     $w++;
                 }
         }
+
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         // Define items per page as 1
         $perPage = 1;
@@ -126,8 +140,10 @@ class Exam2Controller extends Controller
         );
         // Determine if the current page is the last page
         $isLastPage = $currentPage == $paginatedQuestions->lastPage();
-        $time=1;
-        return view('majorexam', ['questions' => $ques, 'isLastPage' => $isLastPage,'time'=>$time,'attemp'=>$attemp,'user'=>$user]);
+        $time = $exam->duration;
+        // dd($time);
+        
+        return view('majorexam', ['questions' => $ques, 'examtype'=>$exam_id,'isLastPage' => $isLastPage,'time'=>$time,'attemp'=>$attemp,'user'=>$user]);
      }
     public function submitquestions(Request $request)
     {
@@ -147,7 +163,7 @@ public function savePageAnswers(Request $request)
     // Fetch responses based on conditions
     $responses = Tes::where('student_id', $request->user)
         ->where('attemp', $request->attemp)
-        ->where('exam_type', 2)
+        ->where('exam_type', $request->examtype)
         ->latest()
         ->get();
 
@@ -195,9 +211,10 @@ public function savePageAnswers(Request $request)
                 'selected_answer' => $this->getans($qb[$co], $ans),
                 'correct_answer' => $this->getcorans($qb[$co]),
                 'feedback' => $this->getquestionfeed($qb[$co]),
+                'topic' => $this->gettopic($qb[$co]),
                 'is_correct' => $isCorrect
             ];
-
+            $topicz=$this->gettopic($qb[$co]);
             $co++;
             $totalQuestions++;
         }
@@ -215,12 +232,12 @@ public function savePageAnswers(Request $request)
             'response_id' => $tname,
             'total_score' => $score,
             'total_point' => $co,
+            'topic' =>  $topicz,
             'answers' => $answerResults
         ];
     }
-
     // Return the scores and answers with correctness to a view
-    return view('majorsresults', compact('responseScores', 'tps', 'totalScore', 'totalQuestions'));
+    return view('majorsresults2', compact('responseScores', 'tps', 'totalScore', 'totalQuestions'));
 }
 
 
@@ -261,6 +278,12 @@ public function getans($q,$ans){
 public function getquestion($q){
     $q=MajorQuestions::find($q);
     return $q->qdesc;
+    //return $this->generate_exam(1);
+}
+public function gettopic($q){
+    $q=MajorQuestions::find($q);
+    $tps=Topic::where('topic_id',$q->topic_id)->first()->topic_name;
+    return $tps;
     //return $this->generate_exam(1);
 }
 public function getquestionfeed($q){

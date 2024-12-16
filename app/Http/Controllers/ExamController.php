@@ -10,8 +10,11 @@ use App\Tes;
 use App\ExamConfig;
 use App\Topic;
 use App\SubTop;
-
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Auth;
+use App\Models\Examinations;
+use Carbon\Carbon;
 
 class ExamController extends Controller
 {
@@ -256,29 +259,58 @@ class ExamController extends Controller
     }
     public function indexz(){
         // return $this->generate_mockexam(2,1);
+        $now = \Carbon\Carbon::now()->format('Y-m-d');
         $user = Auth::user()->id;
-        $top = Topic::all();
-        return view('/exam',compact('user','top'));
+        $top = Examinations::where('start_date', '<=', $now)
+                            ->where('end_date', '>=', $now)->get();
+        // dd($top);
+        return view('/exam', compact('user','top'));
      }
 
      public function indexTrial() {
         $user = Auth::user()->id;
         $top = Topic::all();
-        return view('/trial',compact('user','top'));
+        return view('/trial',compact('user', 'top'));
      }
 
      public function indexResults(){
+        //alaek biit amin nga major exam
+        $exams = Examinations::where('exam_type', 1)->get();
+        //sumaruno kt alaen dagijay student responses kadejay nga major exam
+        $results = []; // total items, total score, percentage
+        foreach($exams as $examKey => $exam) {
+            $responses = Tes::where('exam_type', $exam->exam_id)->where('student_id', Auth::user()->id)->get();
+            if(!$responses->isEmpty()) {
+                $results[$examKey]['total_item'] = $results[$examKey]['total_item'] ?? 0;
+                $results[$examKey]['total_score'] = $results[$examKey]['total_score'] ?? 0;
+                $results[$examKey]['percentage'] = $results[$examKey]['percentage'] ?? 0;
+                $results[$examKey]['exam_id'] = $exam->exam_id;
+                $results[$examKey]['exam_name'] = $exam->exam_name;
+                $results[$examKey]['end_date'] = $exam->end_date;
+                $results[$examKey]['start_date'] = $exam->start_date;
+
+                foreach($responses as $key => $response) {
+                    $item = count(json_decode($response->questions));
+
+                    $results[$examKey]['total_item'] += $item;
+                    $results[$examKey]['total_score'] += $response->score;
+                }
+                $results[$examKey]['percentage'] = round(($results[$examKey]['total_score'] / $results[$examKey]['total_item']) * 100, 2);;
+            }
+        }
+        // dd($results);
+        
         $user = Auth::user()->id;
-        $top = Topic::all();
-        return view('/results',compact('user','top'));
-     }
+        return view('/results', compact('user', 'results'));
+    }
 
     public function index3(Request $r){
         return $this->generate_exam($r->id);
     }
 
     public function index4(Request $r){
-       return $this->generate_mockexam($r->topic,$r->id);
+        // dd($r->all());
+        return $this->generate_mockexam($r->topic, $r->id);
     }
 
     public function generate_exam($user){
@@ -342,6 +374,7 @@ class ExamController extends Controller
 
     public function generate_mockexam($topic, $user) {
         $y = Qs::all()->count();
+        $examtype=0;
         $conf = ExamConfig::where('status', 1)->where('type', 2)->first();
         $time = $conf->time;
         $top = $topic;
@@ -353,7 +386,7 @@ class ExamController extends Controller
         $totalQuestions = 0;
         $num =1;
         $att1 = Tes::where('student_id', $user)
-        ->where('exam_type', 0)
+        ->where('exam_type',  $examtype)
         ->latest()
         ->first();
         if($att1)
@@ -367,7 +400,7 @@ class ExamController extends Controller
             }
             $min = Qs::where('topic_id', $st->subtopic_id)->where('status', 1)->get()->min('id');
             $max = Qs::where('topic_id', $st->subtopic_id)->where('status', 1)->get()->max('id');
-            $result = $this->generate_q($min, $max, $st->subtopic_id, $n, $user, 0);
+            $result = $this->generate_q($min, $max, $st->subtopic_id, $n, $user,  $examtype);
             $attemp1 = $result['attempt'];
             if($attemp1!=-1){
                 $attemp=$attemp;
@@ -378,44 +411,52 @@ class ExamController extends Controller
             return view('max_attempt'); //Fully Trialled
         }
     
-        $ques = array();
+        $ques = collect();
         $st = SubTop::where('topic_id', $top)->get();
         $z = 1;
         $ids = array();
         foreach ($st as $st) {
             $i = 0;
-            $x = Tes::where('student_id', $user)->where('topic', $st->subtopic_id)->where('exam_type', 0)->latest()->first();
-            if($x==NULL){
-                continue;
-            }
-               
-            $ids[$z - 1] = $x->id;
-            $x = json_decode($x->questions);
-            foreach ($x as $x) {
-                $y = $this->getQ($x);
-                $ques[$z][$i]['id'] = $y->id;
-                $ques[$z][$i]['qn'] = $i + 1;
-                $ques[$z][$i]['q'] = $y->qdesc;
-                $ques[$z][$i]['c1'] = $y->opt1;
-                $ques[$z][$i]['c2'] = $y->opt2;
-                $ques[$z][$i]['c3'] = $y->opt3;
-                $ques[$z][$i]['c4'] = $y->opt4;
-                $ques[$z][$i]['c5'] = $y->opt5;
-                $i++;
-                $totalQuestions++;
-            }
-            $z++;
-           
+            $tps=Topic::where('topic_id',$st->topic_id)->first()->topic_name;
+            $responses=Tes::where('student_id',$user)->where('topic',$st->subtopic_id)->where('exam_type',$examtype)->latest()->first();  
+              if($responses=="")
+                    continue;
+            $questions=json_decode($responses->questions);
+                $w=1;
+                foreach($questions as $x){
+                    $q=$this->getQ($x);       
+                        $ques->push([
+                            'no' => $w,
+                            'topic'=>$tps,
+                            'subtopic'=>$st->name,
+                            'desc' => $q->qdesc,
+                            'opt1'=>$q->opt1,
+                            'opt2'=>$q->opt2,
+                            'opt3'=>$q->opt3,
+                            'opt4'=>$q->opt4,
+                            'sr'=>$responses->id,
+                    ]);
+                    $w++;
+                }
         }
-        $st = Tes::whereIn('topic', $tpcx)->where('student_id', $user)->where('attemp', $attemp)->where('exam_type', 2)->get('topic')->toArray();
-        $c = $i;
-        $i = 0;
-        $j = 0;
-        $tops = $z;
-        $a = array();
-        $ext = 2;
-        //change UI to to other one
-        return view('trialexam', compact('ques', 'c', 'i', 'j', 'tops', 'a', 'st', 'user', 'ids', 'attemp', 'top', 'time', 'ext', 'totalQuestions','num'));
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        // Define items per page as 1
+        $perPage = 1;
+        // Slice the collection for the current page
+        $currentPageItems = $ques->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        // Create paginator with the sliced items
+        $paginatedQuestions = new LengthAwarePaginator(
+            $currentPageItems, // Items for the current page
+            $ques->count(), // Total items in the collection
+            $perPage, // Items per page
+            $currentPage, // Current page
+            ['path' => request()->url()] // Maintain the base URL
+        );
+        // Determine if the current page is the last page
+        $isLastPage = $currentPage == $paginatedQuestions->lastPage();
+        $time=1;
+ 
+        return view('trialexamversion2', ['questions' => $ques, 'examtype'=>$examtype,'isLastPage' => $isLastPage,'time'=>$time,'attemp'=>$attemp,'user'=>$user]);
     }
     
 
@@ -485,8 +526,126 @@ class ExamController extends Controller
         return $ques;
     }
 
+    public function savePageAnswers(Request $request)
+    {
+        $allAnswersJson = $request->input('allAnswers');
+        $allAnswers = json_decode($allAnswersJson, true); // Decode JSON to associative array
+        
+        // Fetch responses based on conditions
+        $responses = Tes::where('student_id', $request->user)
+            ->where('attemp', $request->attemp)
+            ->where('exam_type', $request->examtype)
+            ->latest()
+            ->get();
+
+        $responseScores = []; // Array to hold scores and answer correctness for each response
+        $tps = "";
+        $totalQuestions = 0;
+        $totalScore = 0; // Variable to track total score across all responses
+    
+        foreach ($responses as $r) {
+            $qb = json_decode($r->questions); // Questions basis
+            $co = 0;
+            $tname = "";
+            $score = 0;
+            $x = Tes::find($r->id);
+            $answers = [];
+            $answerResults = []; // Array to store answer correctness details
+    
+            $st = SubTop::where('subtopic_id', $r->topic)->first();
+            if ($st) {
+                $tname = $st->name;
+            }
+    
+            if ($tps == null) {
+                $tps = Topic::where('topic_id', $st->topic_id)->first()->topic_name;
+            }
+    
+            foreach ($allAnswers[$r->id] as $ans) {
+                $currentQuestion = $qb[$co] ?? [
+                    'details' => 'No details available',
+                    'correct_answer' => 0,
+                    'feedback' => 'No feedback available',
+                ];
+    
+                // Get the question and correct answer
+                $isCorrect = $this->check_question($currentQuestion, $ans) ?? 0;
+    
+                // Calculate score based on correctness
+                $score += $isCorrect;
+                $answers[] = $ans; // Collect the answer
+    
+                // Add question answer correctness to the array
+                $answerResults[] = [
+                    'question_no' => $co + 1,
+                    'question_details' => $this->getquestion($qb[$co]),
+                    'selected_answer' => $this->getans($qb[$co], $ans),
+                    'correct_answer' => $this->getcorans($qb[$co]),
+                    'feedback' => $this->getquestionfeed($qb[$co]),
+                    'is_correct' => $isCorrect
+                ];
+    
+                $co++;
+                $totalQuestions++;
+            }
+    
+            // Save answers and score to the database
+            $x->answers = json_encode($answers);
+            $x->score = $score;
+            $x->save();
+    
+            // Add this response's score to the total score
+            $totalScore += $score;
+    
+            // Add this response's score and answer details to the array for display
+            $responseScores[] = [
+                'response_id' => $tname,
+                'total_score' => $score,
+                'total_point' => $co,
+                'answers' => $answerResults
+            ];
+        }
+    
+        // Return the scores and answers with correctness to a view
+        return view('majorsresults', compact('responseScores', 'tps', 'totalScore', 'totalQuestions'));
+    }
+    
 
 
+    
+    public function getcorans($q){
+        $q=Qs::find($q);
+        switch($q->ans){
+            case 1:return $q->opt1;break;
+            case 2:return $q->opt2;break;
+            case 3:return $q->opt3;break;
+            case 4:return $q->opt4;break;
+            case 5:return $q->opt5;break;
+        }      
+        //return $this->generate_exam(1);
+    }
+    public function getans($q,$ans){
+        $q=Qs::find($q);
+        switch($ans){
+            case 0:return "Did not Answer";break;
+            case 1:return $q->opt1;break;
+            case 2:return $q->opt2;break;
+            case 3:return $q->opt3;break;
+            case 4:return $q->opt4;break;
+            case 5:return $q->opt5;break;
+        }      
+        //return $this->generate_exam(1);
+    }
+    public function getquestion($q){
+        $q=Qs::find($q);
+        return $q->qdesc;
+        //return $this->generate_exam(1);
+    }
+    public function getquestionfeed($q){
+        $q=Qs::find($q);
+        return $q->reff;
+        //return $this->generate_exam(1);
+    }
     function generate_q($min, $max, $topic, $n, $user, $xts) {
         $temp = 0;
 

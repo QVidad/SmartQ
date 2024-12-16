@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<title>PLE-REAP | TRIAL EXAM </title>
+<title>SMARTQ | MAX ATTEMPT </title>
 <body>
-    YOU ALREADY REACH THE NUMBER OF MAXIMUM ATTEMPT
-    GO BACK HOME?
+    <maxattemptmodal />
 </body>
 @endsection
+  

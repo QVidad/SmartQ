@@ -26,7 +26,7 @@
                 @foreach ($responseScores as $response)
                     {{-- The Subtopic --}}
                     <div class="row">
-                        <div class="col-lg-12"> <h2 class="font-weight-bold">Topic: {{$tps}} </h2> </div>
+                        <div class="col-lg-12"> <h2 class="font-weight-bold">Topic: {{ $response['topic']}} </h2> </div>
                         <div class="col-lg-12"> <h5 class="font-weight-bold">Subtopic: {{ $response['response_id'] }}</h5> </div>
                     </div>
                     <ul>

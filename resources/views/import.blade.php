@@ -1,6 +1,6 @@
 @extends('layouts.facultylayout')
 @section('content')
-<title>PLE-REAP FACULTY | DASHBOARD </title>
+<title>SMARTQ FACULTY | DASHBOARD </title>
 <body>
     <div style="">
       <facultycontentcard title="Upload File">

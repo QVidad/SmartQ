@@ -1,7 +1,7 @@
 @extends('layouts.facultylayout')
 
 @section('content')
-<title>PLE-REAP FACULTY | DASHBOARD </title>
+<title>SMARTQ FACULTY | CREATE EXAM </title>
 <body>
     <div style="">
         <facultycontentcard title="Add a Question">
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="topic_id">Topic</label>
+                    <label for="topic_id">Subtopic</label>
                     <select class="form-control select2" id="topic_id" name="topic_id" required>
                         @foreach($subtopic as $st)
                         <option value="{{$st->subtopic_id}}">{{$st->name}}</option>

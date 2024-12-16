@@ -33,6 +33,11 @@ Route::group(['middleware'=>['auth','student']], function () {
     Route::get('/examination', [ExamController::class, 'index3'])->name('index3');
     Route::get('/mockexam', [ExamController::class, 'index4'])->name('index4');
     Route::post('/finish', [ExamController::class, 'store'])->name('stored');
+
+    Route::get('/majorexam', [Exam2Controller::class, 'majorindex'])->name('majorexam');
+    Route::post('/submit-final-answers', [Exam2Controller::class, 'submitFinalAnswers'])->name('showResults');
+    Route::post('/save-page-answers', [Exam2Controller::class, 'savePageAnswers'])->name('submitmajorexam');
+    Route::post('/save-page-answers1', [ExamController::class, 'savePageAnswers'])->name('submittrialexam');
 });
 
 Route::group(['middleware'=>['auth','faculty']], function () {
@@ -72,8 +77,3 @@ Route::post('import', 'ExamController@import');
 Route::post('news/store', array('as' => 'posts.store', 'uses' => 'ExamController@import'));
 
 Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/majorexam', [Exam2Controller::class, 'majorindex'])->name('majorexam');
-Route::post('/submit-final-answers', [Exam2Controller::class, 'submitFinalAnswers'])->name('showResults');
-Route::post('/save-page-answers', [Exam2Controller::class, 'savePageAnswers'])->name('submitmajorexam');
-Route::post('/save-page-answers1', [ExamController::class, 'savePageAnswers'])->name('submittrialexam');

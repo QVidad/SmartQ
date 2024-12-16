@@ -363,19 +363,22 @@ class ExamController extends Controller
             $i=0;
             $x=Tes::where('student_id',$user)->where('topic',$st->subtopic_id)->where('exam_type',2)->latest()->first();      
             $ids[$z-1]=$x->id;
-            $x=json_decode($x->questions);
-            foreach($x as $x){
-                $y=$this->getQ($x);           
-                $ques[$z][$i]['id']=$y->id;
-                $ques[$z][$i]['qn']=$i+1;
-                $ques[$z][$i]['q']=$y->qdesc;
-                $ques[$z][$i]['c1']=$y->opt1;
-                $ques[$z][$i]['c2']=$y->opt2;
-                $ques[$z][$i]['c3']=$y->opt3;
-                $ques[$z][$i]['c4']=$y->opt4;
-                $ques[$z][$i]['c5']=$y->opt5;
-                $i++;
-            }
+            $questions=json_decode($x->questions);
+                $w=1;
+                foreach($questions as $x){
+                    $q=$this->getQ($x);       
+                    $ques->push([
+                        'no' => $w,
+                        'topic'=>$tps,
+                        'subtopic'=>$st->name,
+                        'desc' => $q->qdesc,
+                        'opt1'=>$q->opt1,
+                        'opt2'=>$q->opt2,
+                        'opt3'=>$q->opt3,
+                        'opt4'=>$q->opt4,
+                        'sr'=>$responses->id,
+                    ]);
+                    $w++;
             $z++;
         }
         $st = SubTop::where('topic_id',$top)->get()->toArray();
@@ -384,6 +387,8 @@ class ExamController extends Controller
         $j=0;
         $tops=$z;
         $a = array();
+        return $ques;
+
         return view('test2',compact('ques','c','i','j','tops','a','st','user','ids','attemp','top','time'));
     }
 

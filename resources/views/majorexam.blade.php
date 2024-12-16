@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>SmartQ | Actual Exam</title>
+<title>SMARTQ| MAJOR EXAM</title>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet">
@@ -23,10 +23,10 @@
     <nav class="navbar navbar-light bg-light justify-content-between px-3">
         <div>
             <a class="navbar-brand">
-                <img src="/assets/logo.png" alt="Logo" style="height: 48px; width: auto;">
+                <img src="https://med.ple-reap.com/assets/img/logo.png" alt="Logo" style="height: 48px; width: auto;">
             </a>
             <a class="alert-link text-decoration-none" aria-current="page" style="color: black;">
-                SmartQ
+                PLE-REAP: Medicine Website App
             </a>  
         </div>
     </nav>
@@ -55,6 +55,7 @@
                     <input type="hidden" name="allAnswers" id="allAnswers">
                     <input type="hidden" name="attemp" id="attemp" value="{{$attemp}}">
                     <input type="hidden" name="user" id="user" value="{{$user}}">
+                    <input type="hidden" name="examtype" id="examtype" value="{{$examtype}}">
                     <!-- Question container, updated dynamically -->
                     <div id="question-container">
                         <!-- Dynamic question content will be injected here -->
@@ -132,7 +133,7 @@
         
         let currentQuestionIndex = 0;
         let number = 1;
-        let examTime = {{ $time }} * 60 * 60; // Multiply by 60*60 to get total seconds
+        let examTime = {{ $time }} * 60; // Multiply by 60*60 to get total seconds
         let timerInterval;
         let timerElement = document.getElementById("timer");
         

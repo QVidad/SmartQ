@@ -98,7 +98,7 @@ class FacultyExamController extends Controller
             $exam->description = $r->description;
             $exam->created_by = Auth::user()->id;
             $exam->start_date = $r->startDate;
-            $exam->end_date = $r->startDate;
+            $exam->end_date = $r->endDate;
             $exam->duration = $r->duration;
 
             $exam->save();
@@ -142,7 +142,7 @@ class FacultyExamController extends Controller
             $exam->created_by = Auth::user()->id;
             $exam->item_num = $r->item_num;
             $exam->start_date = $r->startDate;
-            $exam->end_date = $r->startDate;
+            $exam->end_date = $r->endDate;
             $exam->duration = $r->duration;
 
             $exam->save();

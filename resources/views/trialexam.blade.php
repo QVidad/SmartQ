@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>SmartQ | Actual Exam</title>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet">
@@ -23,10 +22,10 @@
     <nav class="navbar navbar-light bg-light justify-content-between px-3">
         <div>
             <a class="navbar-brand">
-                <img src="/assets/logo.png" alt="Logo" style="height: 48px; width: auto;">
+                <img src="https://med.ple-reap.com/assets/img/logo.png" alt="Logo" style="height: 48px; width: auto;">
             </a>
             <a class="alert-link text-decoration-none" aria-current="page" style="color: black;">
-                SmartQ
+                PLE-REAP: Medicine Website App
             </a>  
         </div>
     </nav>
@@ -55,6 +54,7 @@
                     <input type="hidden" name="allAnswers" id="allAnswers">
                     <input type="hidden" name="attemp" id="attemp" value="{{$attemp}}">
                     <input type="hidden" name="user" id="user" value="{{$user}}">
+                    <input type="hidden" name="examtype" id="examtype" value="{{$examtype}}">
                     <!-- Question container, updated dynamically -->
                     <div id="question-container">
                         <!-- Dynamic question content will be injected here -->
@@ -81,7 +81,7 @@
             </div>
         </div>
         <!-- Times Up Modal -->
-        <div class="modal fade" id="timesUpModal" tabindex="-1" aria-labelledby="timesUpModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal fade" id="timesUpModal" tabindex="-1" aria-labelledby="timesUpModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content" style="background-color: #292B4E; border-radius: 20px; width: 35rem;">
                     <div class="modal-body text-white justify-content-center text-center">
@@ -99,7 +99,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Navigation Modal -->
         <div class="modal fade" id="navigationModal" tabindex="-1" aria-labelledby="navigationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-end">
@@ -122,7 +121,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- JavaScript to manage questions and answer collection -->
@@ -132,7 +130,7 @@
         
         let currentQuestionIndex = 0;
         let number = 1;
-        let examTime = {{ $time }} * 60 * 60; // Multiply by 60*60 to get total seconds
+        let examTime = 10// {{ $time }} * 60 * 60; // Multiply by 60*60 to get total seconds
         let timerInterval;
         let timerElement = document.getElementById("timer");
         
@@ -198,7 +196,7 @@
             const answeredPercentage = getAnsweredPercentage();
             progressBar.innerHTML = `
                 <div class="row">
-                    <div class="col-10 mt-2 pt-1">
+                    <div class="col-10">
                         <div class="progress" style="height: 2rem; border-radius: 2rem;">
                             <div id="progress-bar"
                                 class="progress-bar progress-bar-striped progress-bar-animated"
@@ -213,13 +211,13 @@
                     </div>
 
                     <div class="col-1">
-                        <p class="display-4" style="top: -10px; position: relative;">|</p>
+                        <p class="display-4" style="top: -20px; position: relative;">|</p>
                     </div>
 
                     <div class="col-1">
                         <i class="bi bi-stopwatch-fill display-4"></i>
                     </div>
-                
+                </div>
             `;
 
 
@@ -265,12 +263,11 @@
             const seconds = examTime % 60;
 
             timerElement.innerHTML = ` 
-                <div class="timer-container pt-1" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; justify-content: right; align-items: right;">
-                    <h2 style="font-weight: bold; margin: 0;z-index: 999">${hours}h ${minutes}m ${seconds}s</h2>
+                <div class="timer-container mt-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; justify-content: right; align-items: center;">
+                    <h1 style="font-weight: bold; font-size: 2rem; margin: 0;">${hours}h ${minutes}m ${seconds}s</h1>
                 </div>
                 <div class="mt-2" style="position: relative; top: -15px;">
                 <div class="text-right fs-md-2 fs-lg-3">Time Left</div> 
-                </div>
                 </div>
             `;
 
@@ -287,6 +284,11 @@
 
             examTime--;
         }
+        // Start the countdown timer
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
 
         // Start the countdown timer
         function startTimer() {
@@ -295,24 +297,18 @@
 
         // Show the modal when time runs out
         function showTimesUpModal() {
-            const modalElement = document.getElementById('timesUpModal');
-            const modal = new bootstrap.Modal(modalElement, {
-                backdrop: 'static', // Prevent closing by clicking outside
-                keyboard: false,    // Prevent closing with the ESC key
-            });
+            const modal = new bootstrap.Modal(document.getElementById('timesUpModal'));
             modal.show();
-
             // Provide options for user redirection
             document.getElementById('goToExam').addEventListener('click', function () {
                 window.location.href = '/exam';
             });
-
-            document.getElementById('viewResults').addEventListener('click', function () {
-                // Replace with your logic for viewing results
-                alert('View results clicked!');
-            });
+            
+            // Redirect to home after 5 seconds
+            setTimeout(function() {
+                
+            }, 5000);
         }
-
 
         document.getElementById('prevBtn').addEventListener('click', function () {
             saveAnswer();

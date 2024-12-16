@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<title>SmartQ | Result</title>
+<title>SMARTQ| TRIAL EXAM RESULT</title>
 
 <body>
     <div class="card px-5 pb-5 shadow" style="background-color: rgba(0, 0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif;">

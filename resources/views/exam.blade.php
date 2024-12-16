@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<title>SmartQ | Exam</title>
+<title>SMARTQ | EXAM </title>
 <body>
     <div class="card px-5 pb-5 shadow" style="background-color: rgba(0, 0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif;">
         <!-- Greetings Text -->
@@ -15,24 +15,24 @@
               <!-- card grid -->
               <div class="container-fluid justify-content-center p-0 m-0">
                 <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-2 ">
-                {{-- @foreach($top as $number)
+                @foreach($top as $number)
                   <div class="grid-item">
                     <div class="col pb-3">
                         <examscard 
-                            category="{{ $number->topic_name}}" 
-                            examLink="{{ route('majorexam', ['id' => $user,'examid'=>2]) }}"
+                            category="{{ $number->exam_name}}" 
+                            examLink="{{ route('majorexam', ['id' => $user,'examid'=> $number->exam_id]) }}"
                         />
                     </div>
                   </div>
-                @endforeach --}}
-                <div class="grid-item">
+                @endforeach
+                <!-- <div class="grid-item">
                   <div class="col pb-3">
                       <examscard 
                           category="Actual" 
-                          examLink="{{ route('majorexam', ['id' => $user,'examid'=>2]) }}"
+                          examLink="{{ route('majorexam', ['id' => $user,'examid' => 2]) }}"
                       />
                   </div>
-                </div>
+                </div> -->
                 </div>
               </div>
             </div>

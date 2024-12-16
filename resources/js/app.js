@@ -20,7 +20,7 @@ Vue.component('navigationmodal', require('./components/NavigationModal.vue').def
 Vue.component('examcontent', require('./components/ExamContent.vue').default);
 Vue.component('areyousuremodal', require('./components/AreYouSureModal.vue').default);
 Vue.component('showscore', require('./components/ShowScore.vue').default);
-
+Vue.component('maxattemptmodal', require('./components/MaxAttemptModal.vue').default);
 
 Vue.component('facultynavbar', require('./components/Faculty/FacultyNavbar.vue').default);
 Vue.component('facultycontentcard', require('./components/Faculty/ContentCard.vue').default);

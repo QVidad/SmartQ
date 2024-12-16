@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<title>PLE-REAP | EXAM </title>
+<title>SMARTQ| EXAM </title>
     <body class="antialiased">
         <div class="card px-5 pb-5 shadow" style="background-color: rgba(0, 0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif;">
             <!-- Greetings Text -->
