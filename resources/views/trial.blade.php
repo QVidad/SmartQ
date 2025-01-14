@@ -21,6 +21,7 @@
                         <examscard 
                             category="{{ $number->topic_name}}" 
                             examLink="{{ route('index4', ['id' => $user, 'topic' => $number->topic_id]) }}" 
+                            :disabled="{{ $number->student_responded ? 'true' : 'false' }}"
                         />
                     </div>
                   </div>

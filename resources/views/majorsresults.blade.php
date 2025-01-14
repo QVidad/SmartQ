@@ -2,7 +2,7 @@
 @section('content')
 <head>
     {{-- <title>{{$tps}} Scores</title> --}}
-    <title>SMARTQ | EXAM RESULT</title>
+    <title>SMARTQ | TRIAL EXAM RESULT</title>
 </head>
 <body>
     <div class="card px-5 pb-5 shadow" style="background-color: rgba(0, 0, 0, 0); font-family: Verdana, Geneva, Tahoma, sans-serif;">

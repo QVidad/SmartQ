@@ -15,19 +15,19 @@
                         <form action="{{ route('questions.index') }}" method="GET" class="d-flex">
                             <input type="text" id="search-input" name="search" class="form-control m-2 p-2" value="{{ request('search') }}" placeholder="Search Questions...">
 
-                            <select name="filterByTopic" class="form-control m-2 p-2">
+                            {{-- <select name="filterByTopic" class="form-control m-2 p-2">
                                 <option value="">Filter by Topic</option>
                                 @foreach($subtopic as $sub)
                                     <option value="{{ $sub->subtopic_id }}" {{ request('filterByTopic') == $sub->subtopic_id ? 'selected' : '' }}>{{ $sub->name }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
                             <button type="submit" class="btn btn-primary m-2">Search</button>
                         </form>
                     </div>
                     
                     <div class="d-flex">
-                        <a href="/download/template" class="m-2 p-2 btn btn-success btn-sm"><i class="bi bi-download"></i> Download Template</a>
-                        <a href="/uploadfile" class="m-2 p-2 btn btn-secondary btn-sm"><i class="bi bi-plus-square"></i> Upload File</a>
+                        {{-- <a href="/download/template" class="m-2 p-2 btn btn-success btn-sm"><i class="bi bi-download"></i> Download Template</a>
+                        <a href="/uploadfile" class="m-2 p-2 btn btn-secondary btn-sm"><i class="bi bi-plus-square"></i> Upload File</a> --}}
                         <a href="/createquestion" class="m-2 p-2 btn btn-primary btn-sm"><i class="bi bi-plus-square"></i> Add Question</a>
                     </div>
                 </div>
