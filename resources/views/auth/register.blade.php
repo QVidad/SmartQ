@@ -1,6 +1,6 @@
 @extends('layouts.loginregister')
 @section('content')
-<title>PLE-REAP STUDENT | REGISTER </title>
+<title>SMARTQ STUDENT | REGISTER </title>
 <body>
     <registermodal />
 </body>

@@ -3,7 +3,6 @@
 <head>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>SmartQ | Login </title>
 </head>
 <body>
     <div style="background-image: url('{{ URL::to('/') }}/assets/background.png'); 
