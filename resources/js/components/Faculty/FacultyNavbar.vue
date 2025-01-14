@@ -30,7 +30,7 @@
                   <h6 class="text-white">Question Bank</h6>
                 </div>
               </a>
-              <span class="border-right px-1 mb-2 mt-1"></span> <!-- Divider -->
+              <!-- <span class="border-right px-1 mb-2 mt-1"></span> 
               <a href="/students" class="nav-link px-4 pb-0 m-0">
                 <div class="row justify-content-center pb-0 mb-0">
                   <h2 class="mb-0"><i class="bi bi-person-vcard-fill text-white"></i></h2>
@@ -38,7 +38,7 @@
                 <div class="row justify-content-center pt-0 m-0">
                   <h6 class="text-white">Students</h6>
                 </div>
-              </a>
+              </a> -->
             </div>
           </li>
           <li class="nav-item">
