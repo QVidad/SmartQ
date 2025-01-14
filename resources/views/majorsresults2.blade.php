@@ -11,7 +11,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <p class="h1 p-0 m-0 text-white" style="font-style: italic;">Exam Results</p>
-                    <p class="display-4 p-0 m-0 text-white font-weight-bold">Exam 1</p>  
+                    <p class="display-4 p-0 m-0 text-white font-weight-bold">{{$title}}</p>  
                 </div>
                 <div class="text-white text-center">
                     <showscore score="{{$totalScore}}" total="{{$totalQuestions}}"/>

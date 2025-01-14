@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>SMARTQ| MAJOR EXAM</title>
+<title>SMARTQ | MAJOR EXAM</title>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet">
@@ -23,10 +23,10 @@
     <nav class="navbar navbar-light bg-light justify-content-between px-3">
         <div>
             <a class="navbar-brand">
-                <img src="https://med.ple-reap.com/assets/img/logo.png" alt="Logo" style="height: 48px; width: auto;">
+                <img  src="/assets/logo.png" alt="Logo" style="height: 48px; width: auto;">
             </a>
             <a class="alert-link text-decoration-none" aria-current="page" style="color: black;">
-                PLE-REAP: Medicine Website App
+                SmartQ
             </a>  
         </div>
     </nav>

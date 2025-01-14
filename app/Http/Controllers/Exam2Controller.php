@@ -159,6 +159,7 @@ public function submitFinalAnswers(Request $request)
 }
 public function savePageAnswers(Request $request)
 {
+    $title = "Major Exam";
     $allAnswersJson = $request->input('allAnswers');
     $allAnswers = json_decode($allAnswersJson, true); // Decode JSON to associative array
 
@@ -239,7 +240,7 @@ public function savePageAnswers(Request $request)
         ];
     }
     // Return the scores and answers with correctness to a view
-    return view('majorsresults2', compact('responseScores', 'tps', 'totalScore', 'totalQuestions'));
+    return view('majorsresults2', compact('responseScores', 'tps', 'totalScore', 'totalQuestions', 'title'));
 }
 
 
