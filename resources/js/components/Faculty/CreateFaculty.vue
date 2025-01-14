@@ -56,7 +56,7 @@
                 />
               </div>
               <button type="submit" class="btn btn-block" style="background-color: #FFCC33;">
-                Create Faculty
+                Add Faculty
               </button>
             </form>   
     </div>

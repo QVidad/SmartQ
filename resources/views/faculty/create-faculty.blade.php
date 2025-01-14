@@ -1,9 +1,9 @@
 @extends('layouts.facultylayout')
 @section('content')
-<title>PLE-REAP FACULTY | FACULTY </title>
+<title>SmartQ Faculty | Faculty </title>
 <body>
     <div style="">
-        <facultycontentcard title="Create Faculty">
+        <facultycontentcard title="Manage Faculty">
             <create-faculty />
         </facultycontentcard>
     </div>

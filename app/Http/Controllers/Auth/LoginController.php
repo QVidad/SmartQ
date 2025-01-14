@@ -39,8 +39,12 @@ class LoginController extends Controller
     {
         if (Auth::check() && Auth::user()->role_id == 1) {
             $this->redirectTo = route("faculty");
-        } elseif (Auth::check() && Auth::user()->role_id == 2) {
+        } 
+        elseif (Auth::check() && Auth::user()->role_id == 2) {
             $this->redirectTo = route("exam");
+        }
+        elseif (Auth::check() && Auth::user()->role_id == 3) {
+            $this->redirectTo = route("faculties");
         }
 
         $this->middleware('guest')->except('logout');

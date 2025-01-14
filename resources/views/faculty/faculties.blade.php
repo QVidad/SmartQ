@@ -1,9 +1,9 @@
 @extends('layouts.facultylayout')
 @section('content')
-<title>SmartQ Faculty | Faculties Report</title>
+<title>SMARTQ ADMIN</title>
 <body>
     <div style="">
-        <facultycontentcard title="Faculties">
+        <facultycontentcard title="Manage Faculty">
             <faculties :faculties="{{ json_encode($faculties) }}"></faculties>
         </facultycontentcard>
     </div>

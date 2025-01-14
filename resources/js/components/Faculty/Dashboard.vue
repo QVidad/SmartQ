@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <TopStudents :data="data"/>
-        <BellCurve :data="data"/>
+        <!-- <BellCurve :data="data"/> -->
     </div>
 </template>
 

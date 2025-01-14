@@ -3,7 +3,7 @@
   <div class="d-flex justify-content-end">
       <div class="d-flex">
           <a href="/create-faculty" class="m-2 p-2 btn btn-primary btn-sm">
-              <i class="bi bi-plus-square"></i> Create Faculty
+              <i class="bi bi-plus-square"></i> Add Teacher
           </a>
       </div>
   </div>
@@ -13,18 +13,12 @@
               <thead>
                   <tr>
                       <th>Name</th>
-                      <th>Details</th>
-                      <th>Details</th>
-                      <th>Details</th>
                       <!-- <th>Actions</th> -->
                   </tr>
               </thead>
               <tbody>
                   <tr v-for="faculty in faculties" :key="faculty.id">
                       <td>{{ faculty.name }}</td>
-                      <td>Details</td>
-                      <td>Details</td>
-                      <td>Details</td>
                       <!-- <td>
                           <div class="btn-group">
                               <a href="" class="mx-1 btn btn-primary btn-sm"><i class="bi bi-file-text-fill"></i> Faculty Report </a>
